@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title | strip_emoji }} &mdash; Masak Bareng Gue{% endblock %}
+
+{% block content %}
+
+{% set hue = (recipe.id * 53) % 360 %}
+{% set accent_color = "hsl(" ~ hue ~ ", 48%, 43%)" %}
+
+<div class="recipe-detail" style="--accent-color: {{ accent_color }}">
+  <div class="container">
+    <a href="javascript:history.back()" class="recipe-back">&larr; Kembali</a>
+
+    <div class="recipe-header">
+      <h1 class="recipe-title-lg">{{ recipe.title | strip_emoji }}</h1>
+      <div class="recipe-meta">
+        <span><span class="recipe-meta-dot"></span>{{ recipe.num_ingredients }} bahan</span>
+        <span><span class="recipe-meta-dot"></span>{{ recipe.num_steps }} langkah</span>
+      </div>
+    </div>
+
+    <div class="recipe-content">
+      <aside class="ingredients-card">
+        <h2 class="ingredients-title">bahan-bahan</h2>
+        <ul class="ingredients-list">
+          {% for ing in recipe.ingredients %}
+            <li>
+              <span class="ing-dot"></span>
+              <span>{{ ing }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </aside>
+
+      <div class="steps-section">
+        <div class="steps-header">
+          <h2 class="steps-title">cara memasak</h2>
+          <button class="btn-cooking-mode" id="startCookingBtn">Mulai Memasak</button>
+        </div>
+        <ol class="steps-list">
+          {% for step in recipe.steps %}
+            <li class="step-item">
+              <span class="step-num">{{ loop.index }}</span>
+              <p class="step-text">{{ step }}</p>
+            </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cooking Mode Fullscreen Overlay -->
+<div class="cooking-overlay" id="cookingOverlay">
+  <div class="cooking-header">
+    <span class="cooking-recipe-title">{{ recipe.title | strip_emoji }}</span>
+    <button class="btn-close-cooking" id="closeCookingBtn">&times;</button>
+  </div>
+  <div class="cooking-body">
+    <span class="cooking-step-badge" id="cookingStepBadge">Langkah 1 dari 1</span>
+    <p class="cooking-step-text" id="cookingStepText">Langkah pertama...</p>
+    <div class="cooking-controls">
+      <button class="btn-nav-cooking" id="prevStepBtn">Sebelumnya</button>
+      <button class="btn-nav-cooking btn-next-cooking" id="nextStepBtn">Selanjutnya</button>
+    </div>
+    <div class="cooking-progress-container">
+      <div class="cooking-progress-bar" id="cookingProgressBar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ── Ingredient Checklist ──
+  const ingredientItems = document.querySelectorAll('.ingredients-list li');
+  ingredientItems.forEach(item => {
+    item.addEventListener('click', function() {
+      this.classList.toggle('checked');
+    });
+  });
+
+  // ── Cooking Mode ──
+  const startCookingBtn = document.getElementById('startCookingBtn');
+  const cookingOverlay = document.getElementById('cookingOverlay');
+  const closeCookingBtn = document.getElementById('closeCookingBtn');
+  const prevStepBtn = document.getElementById('prevStepBtn');
+  const nextStepBtn = document.getElementById('nextStepBtn');
+  const stepText = document.getElementById('cookingStepText');
+  const stepBadge = document.getElementById('cookingStepBadge');
+  const progressBar = document.getElementById('cookingProgressBar');
+
+  const steps = [
+    {% for step in recipe.steps %}
+      {{ step | tojson }},
+    {% endfor %}
+  ];
+
+  let currentStepIdx = 0;
+
+  function updateCookingStep() {
+    if (steps.length === 0) return;
+    
+    stepText.textContent = steps[currentStepIdx];
+    stepBadge.textContent = `Langkah ${currentStepIdx + 1} dari ${steps.length}`;
+    
+    const progressPercent = ((currentStepIdx + 1) / steps.length) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    
+    prevStepBtn.disabled = currentStepIdx === 0;
+    
+    if (currentStepIdx === steps.length - 1) {
+      nextStepBtn.textContent = 'Selesai';
+    } else {
+      nextStepBtn.textContent = 'Selanjutnya';
+    }
+  }
+
+  if (startCookingBtn && cookingOverlay) {
+    startCookingBtn.addEventListener('click', function() {
+      currentStepIdx = 0;
+      updateCookingStep();
+      cookingOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (closeCookingBtn) {
+    closeCookingBtn.addEventListener('click', function() {
+      cookingOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+
+  if (prevStepBtn) {
+    prevStepBtn.addEventListener('click', function() {
+      if (currentStepIdx > 0) {
+        currentStepIdx--;
+        updateCookingStep();
+      }
+    });
+  }
+
+  if (nextStepBtn) {
+    nextStepBtn.addEventListener('click', function() {
+      if (currentStepIdx < steps.length - 1) {
+        currentStepIdx++;
+        updateCookingStep();
+      } else {
+        cookingOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

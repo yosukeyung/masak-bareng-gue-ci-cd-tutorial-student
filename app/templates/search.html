@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import recipe_item %}
+{% block title %}{{ query }} &mdash; Masak Bareng Gue{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="search-header">
+    {% if results %}
+      <h1 class="search-title">
+        Hasil untuk &ldquo;<span class="search-query">{{ query }}</span>&rdquo;
+      </h1>
+      <p class="search-meta">{{ results | length }} resep ditemukan</p>
+    {% elif query %}
+      <h1 class="search-title">
+        Tidak ada hasil untuk &ldquo;<span class="search-query">{{ query }}</span>&rdquo;
+      </h1>
+      <p class="search-meta">Coba kata kunci lain, atau cari berdasarkan nama bahan.</p>
+    {% else %}
+      <h1 class="search-title">Cari Resep</h1>
+      <p class="search-meta">Ketik nama masakan atau bahan di kotak pencarian.</p>
+    {% endif %}
+  </div>
+
+  {% if results %}
+    <div class="recipe-list">
+      {% for recipe in results %}
+        {{ recipe_item(recipe, loop.index) }}
+      {% endfor %}
+    </div>
+
+  {% elif query %}
+    <div class="empty-state">
+      <h2 class="empty-state-title">Resep tidak ditemukan</h2>
+      <p class="empty-state-sub">
+        Coba cari dengan kata lain, misalnya
+        <a href="/search?q=ayam">ayam</a>,
+        <a href="/search?q=tempe">tempe</a>, atau
+        <a href="/search?q=rendang">rendang</a>.
+      </p>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Masak Bareng Gue{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=3">
+</head>
+
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">Masak<span>Bareng Gue</span></a>
+
+      <form class="nav-search" action="/search" method="get">
+        <span class="nav-search-icon">🔍</span>
+        <input type="search" name="q" placeholder="Cari resep atau bahan..."
+          value="{{ request.query_params.get('q', '') }}" autocomplete="off">
+      </form>
+
+      <a href="/recipe/{{ random_id }}" class="nav-random" id="randomBtn">Acak Resep</a>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Masak Bareng Gue &mdash; 3.000 resep masakan Indonesia</p>
+    </div>
+  </footer>
+
+  <script>
+    // Random recipe button picks a random ID client-side
+    document.getElementById('randomBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      const id = Math.floor(Math.random() * 3000);
+      window.location.href = '/recipe/' + id;
+    });
+  </script>
+
+</body>
+
+</html>

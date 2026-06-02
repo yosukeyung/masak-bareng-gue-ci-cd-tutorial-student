@@ -1,0 +1,10 @@
+{% macro recipe_item(recipe, idx) %}
+<a href="/recipe/{{ recipe.id }}" class="recipe-item">
+  <span class="recipe-item-num">{{ idx }}</span>
+  <div class="recipe-item-body">
+    <span class="recipe-item-title">{{ recipe.title | strip_emoji }}</span>
+    <span class="recipe-item-meta">{{ recipe.num_ingredients }} bahan &middot; {{ recipe.num_steps }} langkah</span>
+  </div>
+  <span class="recipe-item-arrow">&rarr;</span>
+</a>
+{% endmacro %}
