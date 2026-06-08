@@ -16,14 +16,17 @@ def _load():
 
 RECIPES: list[dict] = _load()
 
+
 def get_random(n: int = 6) -> list[dict]:
     return random.sample(RECIPES, min(n, len(RECIPES)))
+
 
 def get_by_id(recipe_id: int) -> Optional[dict]:
     for r in RECIPES:
         if r["id"] == recipe_id:
             return r
     return None
+
 
 def search(query: str, limit: int = 24) -> list[dict]:
     q = query.lower().strip()
@@ -40,6 +43,7 @@ def search(query: str, limit: int = 24) -> list[dict]:
             ingredient_hits.append(r)
 
     return (title_hits + ingredient_hits)[:limit]
+
 
 def get_stats() -> dict:
     return {
