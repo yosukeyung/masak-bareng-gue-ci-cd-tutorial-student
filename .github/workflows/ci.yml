@@ -27,3 +27,6 @@ jobs:
 
       - name: Test + coverage report
         run: pytest tests/ -v --cov=app --cov-report=term-missing --cov-fail-under=80
+
+      - name: Run tests
+        run: pytest tests/ -v
