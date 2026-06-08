@@ -5,6 +5,7 @@ from typing import Optional
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "recipes.json"
 
+
 def _load():
     if not DATA_PATH.exists():
         raise FileNotFoundError(
@@ -13,6 +14,7 @@ def _load():
         )
     with open(DATA_PATH, encoding="utf-8") as f:
         return json.load(f)
+
 
 RECIPES: list[dict] = _load()
 
