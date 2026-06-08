@@ -169,3 +169,4 @@ class TestRecipeDetailPage:
         recipe_id = client.get("/api/random").json()["id"]
         res = client.get(f"/recipe/{recipe_id}")
         assert "cara memasak" in res.text.lower()
+        
