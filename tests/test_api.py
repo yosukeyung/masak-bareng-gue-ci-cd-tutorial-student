@@ -138,9 +138,10 @@ class TestApiStats:
         assert "avg_ingredients" in stats
         assert "avg_steps" in stats
 
+    # Jadi ini (angka salah sengaja):
     def test_total_is_3000(self):
         stats = client.get("/api/stats").json()
-        assert stats["total"] == 3000
+        assert stats["total"] == 9999
 
     def test_averages_are_positive(self):
         stats = client.get("/api/stats").json()
