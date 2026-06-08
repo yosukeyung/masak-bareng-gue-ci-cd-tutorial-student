@@ -1,18 +1,16 @@
-{% extends "base.html" %}
-{% from "_macros.html" import recipe_item %}
-{% block title %}Masak Bareng Gue &mdash; Resep Masakan Indonesia{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% from "_macros.html" import recipe_item %} {% block
+title %}Masak Bareng Gue &mdash; Resep Masakan Indonesia{% endblock %} {% block
+content %}
 
 <section class="hero">
   <div class="container container-narrow">
-    <p class="hero-kicker">Masak Bareng Gue</p>
+    <p class="hero-kicker">MBG</p>
     <h1 class="hero-title">
-      Masak apa<br>hari ini, Chef?
+      Mas Bahlil Ganteng<br />Buah apa yang paling manis?
     </h1>
     <p class="hero-subtitle">
-      Temukan inspirasi dari 3.000 resep masakan Indonesia.
-      Cari berdasarkan nama masakan atau bahan yang ada di dapur.
+      Temukan inspirasi dari 3.000 resep masakan Indonesia. Cari berdasarkan
+      nama masakan atau bahan yang ada di dapur.
     </p>
 
     <form class="hero-search" action="/search" method="get">
@@ -22,14 +20,14 @@
         placeholder="Rendang, ayam, tahu..."
         autocomplete="off"
         autofocus
-      >
+      />
       <button type="submit">Cari Resep</button>
     </form>
 
     <p class="hero-stats">
-      <strong>{{ stats.total | int }}</strong> resep &middot;
-      rata-rata <strong>{{ stats.avg_ingredients }}</strong> bahan &middot;
-      rata-rata <strong>{{ stats.avg_steps }}</strong> langkah
+      <strong>{{ stats.total | int }}</strong> resep &middot; rata-rata
+      <strong>{{ stats.avg_ingredients }}</strong> bahan &middot; rata-rata
+      <strong>{{ stats.avg_steps }}</strong> langkah
     </p>
   </div>
 </section>
@@ -43,9 +41,8 @@
       <a href="/" class="section-link">Muat ulang &rarr;</a>
     </div>
     <div class="recipe-list">
-      {% for recipe in featured %}
-        {{ recipe_item(recipe, loop.index) }}
-      {% endfor %}
+      {% for recipe in featured %} {{ recipe_item(recipe, loop.index) }} {%
+      endfor %}
     </div>
   </div>
 </section>
